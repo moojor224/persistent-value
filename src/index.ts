@@ -81,7 +81,7 @@ export async function persistValue(
     return {
         get: () => opts.value,
         getKey: () => opts.key,
-        has: () => storageAdapter.hasItem(storageKey),
+        has: () => opts.value !== null,
         isOptional: () => opts.optional,
         set: (value) => {
             storageAdapter.setItem(storageKey, value);
