@@ -75,7 +75,9 @@ export async function persistValue(
         );
         opts.value = value;
     }
-    storageAdapter.setItem(storageKey, opts.value ?? "");
+    if (opts.value !== null) {
+        storageAdapter.setItem(storageKey, opts.value);
+    }
     return {
         get: () => opts.value,
         getKey: () => opts.key,
