@@ -20,10 +20,15 @@ export interface StorageAdapter {
     setItem(key: string, value: string): void;
 }
 export type PersistentValue = {
+    /** get the current value */
     get(): string | null;
+    /** returns true if the current value !== null */
     has(): boolean;
+    /** set the value */
     set(value: string): void;
+    /** returns true if the value is optional (can be null) */
     isOptional(): boolean;
+    /** get the key used to store the value in the storage adapter */
     getKey(): string;
 };
 
@@ -63,7 +68,7 @@ export async function persistValue(
     }
     values[options.key] = opts;
     if (storageAdapter.hasItem(storageKey)) {
-        opts.value = opts.value || storageAdapter.getItem(storageKey); // read saved value if cached value is null (will be null if no value saved)
+        opts.value = opts.value || storageAdapter.getItem(storageKey); // read saved value if cached value is null (storage value will be null if no value saved)
     }
     if (!opts.hasTried || ((opts.value === null || opts.value === "") && !opts.optional)) {
         // haven't tried to get value
