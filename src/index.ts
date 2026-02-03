@@ -70,15 +70,15 @@ export async function persistValue(
     if (storageAdapter.hasItem(storageKey)) {
         opts.value = opts.value || storageAdapter.getItem(storageKey); // read saved value if cached value is null (storage value will be null if no value saved)
     }
-    if (!opts.hasTried || ((opts.value === null || opts.value === "") && !opts.optional)) {
+    if ((!opts.hasTried && opts.value === null) || (opts.value === null && !opts.optional)) {
         // haven't tried to get value
         // OR
         // value is not defined and value is mandatory
         const value = await options.acquireValue(
-            (opts.hasTried && !opts.optional ? "A value must be entered\n" : "") +
-                options.acquireMessage
+            (opts.hasTried && !opts.optional ? "A value must be entered\n" : "") + options.acquireMessage
         );
         opts.value = value;
+        opts.hasTried = true;
     }
     if (opts.value !== null) {
         storageAdapter.setItem(storageKey, opts.value);
